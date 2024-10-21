@@ -180,6 +180,7 @@ document.addEventListener('keydown', (event) => {
       default:
         break;
     }
+    event.preventDefault(); // Prevenir el desplazamiento de la página
   }
   drawBoard();
 });
