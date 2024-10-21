@@ -184,15 +184,19 @@ document.addEventListener('keydown', (event) => {
   drawBoard();
 });
 
+submitScoreBtn.addEventListener('click', promptForScore);
+
 function promptForScore() {
   const name = playerNameInput.value.trim();
   const finalScore = parseInt(scoreElement.textContent, 10);
   if (name && !isNaN(finalScore)) {
-    saveScoreAutomatically(name, finalScore);
+    saveScore(name, finalScore);
+  } else {
+    alert('Por favor ingresa un nombre y asegúrate de que el puntaje sea válido.');
   }
 }
 
-function saveScoreAutomatically(name, score) {
+function saveScore(name, score) {
   fetch('/submit-score', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -200,7 +204,7 @@ function saveScoreAutomatically(name, score) {
   })
     .then(response => response.text())
     .then(data => {
-      console.log('Puntaje registrado automáticamente:', data);
+      console.log('Puntaje registrado:', data);
       renderLeaderboard();
     })
     .catch(error => {
@@ -226,7 +230,6 @@ function renderLeaderboard() {
 
 function gameOverHandler() {
   gameOver = true;
-  const name = playerNameInput.value.trim();
   promptForScore();
 }
 
