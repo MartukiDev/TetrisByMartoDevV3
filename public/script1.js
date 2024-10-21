@@ -152,28 +152,21 @@ function restartGame() {
   scoreElement.textContent = score;
 }
 
+
 document.addEventListener('keydown', (event) => {
+  // Verifica que el juego no haya terminado ni esté en pausa
   if (!gameOver && !paused) {
+    // Prevenir el movimiento de la pantalla
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight' || event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault(); // Evita el comportamiento predeterminado de desplazamiento de la página
+    }
+
     if (event.key === 'ArrowLeft') movePiece(-1, 0);
     if (event.key === 'ArrowRight') movePiece(1, 0);
     if (event.key === 'ArrowDown') dropPiece();
     if (event.key === 'ArrowUp') rotatePiece();
-    drawBoard();
-  }
-});
 
-document.addEventListener('keydown', (event) => {
-  // Prevenir el movimiento de la pantalla
-  if (event.key === 'ArrowLeft' || event.key === 'ArrowRight' || event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-    event.preventDefault(); // Evita el comportamiento predeterminado de desplazamiento de la página
-  }
-
-  if (!gameOver && !paused) {
-    if (event.key === 'ArrowLeft') movePiece(-1, 0);
-    if (event.key === 'ArrowRight') movePiece(1, 0);
-    if (event.key === 'ArrowDown') dropPiece();
-    if (event.key === 'ArrowUp') rotatePiece();
-    drawBoard();
+    drawBoard(); // Dibuja el tablero en cada evento de tecla
   }
 });
 
