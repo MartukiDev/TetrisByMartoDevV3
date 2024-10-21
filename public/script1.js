@@ -34,17 +34,12 @@ let posX = 3;
 let posY = 0;
 
 function createBoard(rows, cols) {
-  const board = [];
-  for (let row = 0; row < rows; row++) {
-    board.push(new Array(cols).fill(0));
-  }
-  return board;
+  return Array.from({ length: rows }, () => Array(cols).fill(0));
 }
 
 function randomPiece() {
-  const piece = pieces[Math.floor(Math.random() * pieces.length)];
-  const color = colors[Math.floor(Math.random() * colors.length)];
-  return { piece, color };
+  const index = Math.floor(Math.random() * pieces.length);
+  return { piece: pieces[index], color: colors[index] };
 }
 
 function drawPiece(piece, x, y, color) {
@@ -90,9 +85,8 @@ function dropPiece() {
     currentPiece = randomPiece();
     posX = 3;
     posY = 0;
-    
+
     if (collides()) {
-      // Si hay colisión al generar una nueva pieza, significa que el juego ha terminado
       gameOverHandler();
     }
   }
@@ -134,8 +128,7 @@ function clearRows() {
 }
 
 function update() {
-  if (gameOver) return;
-  if (!paused) {
+  if (!gameOver && !paused) {
     dropPiece();
     drawBoard();
   }
@@ -152,24 +145,16 @@ function restartGame() {
   scoreElement.textContent = score;
 }
 
+function rotatePiece() {
+  const oldPiece = currentPiece.piece;
+  const rotatedPiece = currentPiece.piece[0].map((_, index) => currentPiece.piece.map(row => row[index]).reverse());
 
-document.addEventListener('keydown', (event) => {
-  // Verifica que el juego no haya terminado ni esté en pausa
-  if (!gameOver && !paused) {
-    // Prevenir el movimiento de la pantalla
-    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight' || event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-      event.preventDefault(); // Evita el comportamiento predeterminado de desplazamiento de la página
-    }
-
-    if (event.key === 'ArrowLeft') movePiece(-1, 0);
-    if (event.key === 'ArrowRight') movePiece(1, 0);
-    if (event.key === 'ArrowDown') dropPiece();
-    if (event.key === 'ArrowUp') rotatePiece();
-
-    drawBoard(); // Dibuja el tablero en cada evento de tecla
+  currentPiece.piece = rotatedPiece;
+  if (collides()) {
+    currentPiece.piece = oldPiece; // Revertir si hay colisión
   }
-});
-
+  drawBoard();
+}
 
 document.getElementById('pauseBtn').addEventListener('click', () => {
   paused = !paused;
@@ -177,19 +162,31 @@ document.getElementById('pauseBtn').addEventListener('click', () => {
 
 document.getElementById('restartBtn').addEventListener('click', restartGame);
 
-function rotatePiece() {
-  const rotatedPiece = currentPiece.piece[0].map((val, index) => currentPiece.piece.map(row => row[index]).reverse());
-  const oldPiece = currentPiece.piece;
-  currentPiece.piece = rotatedPiece;
-  if (collides()) {
-    currentPiece.piece = oldPiece;
+document.addEventListener('keydown', (event) => {
+  if (!gameOver && !paused) {
+    switch (event.key) {
+      case 'ArrowLeft':
+        movePiece(-1, 0);
+        break;
+      case 'ArrowRight':
+        movePiece(1, 0);
+        break;
+      case 'ArrowDown':
+        dropPiece();
+        break;
+      case 'ArrowUp':
+        rotatePiece();
+        break;
+      default:
+        break;
+    }
   }
-}
+  drawBoard();
+});
 
 function promptForScore() {
   const name = playerNameInput.value.trim();
   const finalScore = parseInt(scoreElement.textContent, 10);
-
   if (name && !isNaN(finalScore)) {
     saveScoreAutomatically(name, finalScore);
   }
@@ -198,45 +195,24 @@ function promptForScore() {
 function saveScoreAutomatically(name, score) {
   fetch('/submit-score', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name, score }),
   })
-  .then(response => response.text())
-  .then(data => {
-    console.log('Puntaje registrado automáticamente:', data);
-    renderLeaderboard(); // Actualiza el leaderboard automáticamente
-  })
-  .catch(error => {
-    console.error('Error al registrar el puntaje:', error);
-  });
-}
-
-function loadLeaderboard() {
-  return JSON.parse(localStorage.getItem('leaderboard'));
-}
-
-function renderLeaderboard() {
-  leaderboardElement.innerHTML = ''; // Limpia la lista actual
-  leaderboard.forEach(entry => {
-    const li = document.createElement('li');
-    li.textContent = `${entry.name}: ${entry.score}`;
-    leaderboardElement.appendChild(li);
-  });
-}
-
-function gameOverHandler() {
-  gameOver = true;  // Marca el juego como terminado
-  const name = playerNameInput.value.trim();
-  promptForScore(); // Registra automáticamente el puntaje
+    .then(response => response.text())
+    .then(data => {
+      console.log('Puntaje registrado automáticamente:', data);
+      renderLeaderboard();
+    })
+    .catch(error => {
+      console.error('Error al registrar el puntaje:', error);
+    });
 }
 
 function renderLeaderboard() {
   fetch('/leaderboard')
     .then(response => response.json())
     .then(data => {
-      leaderboardElement.innerHTML = ''; // Limpia la lista actual
+      leaderboardElement.innerHTML = '';
       data.forEach(entry => {
         const li = document.createElement('li');
         li.textContent = `${entry.name}: ${entry.score}`;
@@ -246,6 +222,12 @@ function renderLeaderboard() {
     .catch(error => {
       console.error('Error al obtener la tabla de puntajes:', error);
     });
+}
+
+function gameOverHandler() {
+  gameOver = true;
+  const name = playerNameInput.value.trim();
+  promptForScore();
 }
 
 // Mobile touch gesture support
@@ -274,17 +256,10 @@ function handleTouchEnd() {
   const dx = touchEndX - touchStartX;
   const dy = touchEndY - touchStartY;
 
-  // Move left or right
   if (Math.abs(dx) > Math.abs(dy)) {
-    if (dx > 0) {
-      movePiece(1, 0); // Move right
-    } else {
-      movePiece(-1, 0); // Move left
-    }
+    movePiece(dx > 0 ? 1 : -1, 0); // Move right or left
   } else {
-    if (dy > 0) {
-      dropPiece(); // Accelerate drop
-    }
+    dropPiece(); // Accelerate drop
   }
 
   // Small movement for rotation
