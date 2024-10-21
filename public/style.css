@@ -1,0 +1,125 @@
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #333;
+  color: white;
+  font-family: Arial, sans-serif;
+  padding: 0;
+  margin: 0;
+}
+
+canvas {
+  background-color: #000;
+  border: 2px solid #fff;
+}
+/* Estilos generales */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Evita el scroll horizontal en toda la página */
+}
+
+header {
+  background-color: #939191;
+  width: 100%;
+  height: auto;
+  margin-bottom: 40px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; /* Permite que los elementos se envuelvan en varias líneas si es necesario */
+}
+
+/* Logo */
+#logo {
+  max-width: 40%;
+  height: auto;
+  flex-shrink: 1; /* Permite que la imagen se ajuste según el espacio disponible */
+}
+
+/* Redes sociales */
+.rrss {
+  display: flex;
+  gap: 10px; /* Espacio entre los íconos */
+  flex-shrink: 0; /* Evita que las redes sociales se reduzcan demasiado */
+}
+
+.rrss img {
+  width: 50px; /* Tamaño pequeño de los íconos */
+  height: auto;
+}
+
+/* Media queries para pantallas pequeñas */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column; /* Pone los elementos uno debajo del otro en pantallas pequeñas */
+    align-items: center; /* Centra los elementos en pantallas pequeñas */
+  }
+  #logo{
+    max-width: 90%;
+    height: auto;
+  }
+
+  .rrss {
+    margin-top: 10px; /* Da espacio entre el logo y las redes sociales */
+  }
+
+  .rrss img {
+    width: 30px; /* Reduce un poco el tamaño de los íconos en móviles */
+  }
+}
+
+.text1{
+  font-size:15px;
+  margin-bottom: 30px;
+
+}
+
+.controls {
+  margin-top: 10px;
+  text-align: center;
+}
+
+button {
+  margin: 5px;
+  padding: 10px 20px;
+  background-color: #939191;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #1d1d1d;
+}
+
+.ladderboard {
+  margin-top: 20px;
+  text-align: center;
+}
+
+#playerName {
+  padding: 5px;
+  font-size: 16px;
+}
+
+#leaderboard {
+  list-style-type: none;
+  padding: 0;
+}
+
+#leaderboard li {
+  background-color: #444;
+  padding: 5px;
+  margin: 5px 0;
+  border-radius: 5px;
+}

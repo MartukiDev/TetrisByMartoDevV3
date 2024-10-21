@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TetrisByMartoDev</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <img id="logo" src="Assets/logo.png" alt="">
+    <div class="rrss">
+
+      <a href="" target="_blank">
+        <img src="Assets/instagram.svg" alt="">
+      </a>
+      <a href="" target="_blank">
+        <img src="Assets/facebook.svg" alt="">
+      </a>
+      <a href="" target="_blank">
+        <img src="Assets/twitter.svg" alt="">
+      </a>
+      <a href="" target="_blank">
+        <img src="Assets/guthub.svg" alt="">
+      </a>
+    </div>
+  </header>
+  <div class="text1">
+    <h3>Ingresa tu nombre para registrar el puntaje!</h3>
+  </div>
+  <canvas id="tetris" width="300" height="600"></canvas>
+  <div class="controls">
+    <button id="pauseBtn">Pausar</button>
+    <button id="restartBtn">Reiniciar</button>
+    <div>Puntaje: <span id="score">0</span></div>
+  </div>
+  
+  <div class="ladderboard">
+    <h3>Leaderboard</h3>
+    <input type="text" id="playerName" placeholder="Tu nombre" maxlength="30">
+    <ul id="leaderboard"></ul>
+  </div>
+  
+  <script src="script1.js"></script>
+</body>
+</html>
