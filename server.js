@@ -13,7 +13,7 @@ db.run(`CREATE TABLE IF NOT EXISTS scores (
   )`);
 
 // Ruta para obtener los 10 mejores puntajes
-app.get('/leaderboard', (req, res) => {
+app.get('tetris-by-marto-dev-v3.vercel.app/leaderboard', (req, res) => {
     const query = `SELECT name, score FROM scores ORDER BY score DESC LIMIT 10`;
     db.all(query, [], (err, rows) => {
       if (err) {
@@ -24,7 +24,7 @@ app.get('/leaderboard', (req, res) => {
 });
 
 // Ruta para guardar un nuevo puntaje
-app.post('/submit-score', (req, res) => {
+app.post('tetris-by-marto-dev-v3.vercel.app/submit-score', (req, res) => {
     const { name, score } = req.body;
   
     // Verifica si el jugador ya existe en la base de datos
