@@ -5,7 +5,11 @@ const db = new sqlite3.Database('./ladderboard.db');
 const cors = require(cors);
 
 
-app.use(cors());
+app.use(
+  cors({
+    origin: ['http://localhost:3000/'],
+  })
+);
 app.use(express.json());
 app.use(express.static('public')); // Tu carpeta de archivos estáticos (HTML, JS, CSS)
 
