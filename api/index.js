@@ -2,12 +2,12 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const app = express();
 const db = new sqlite3.Database('./ladderboard.db');
-const cors = require(cors);
+const cors = require('cors');
 
 
 app.use(
   cors({
-    origin: ['http://localhost:3000/'],
+    origin: 'http://localhost:3000/',
   })
 );
 app.use(express.json());

@@ -199,7 +199,7 @@ function promptForScore() {
 }
 
 function saveScore(name, score) {
-  fetch('https://tetris-by-marto-dev-v3.vercel.app/submit-score', {
+  fetch('/submit-score', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name, score }),
