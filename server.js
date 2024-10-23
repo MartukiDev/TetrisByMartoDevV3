@@ -2,7 +2,10 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const app = express();
 const db = new sqlite3.Database('./ladderboard.db');
+const cors = require(cors);
 
+
+app.use(cors());
 app.use(express.json());
 app.use(express.static('public')); // Tu carpeta de archivos estáticos (HTML, JS, CSS)
 
@@ -13,7 +16,7 @@ db.run(`CREATE TABLE IF NOT EXISTS scores (
   )`);
 
 // Ruta para obtener los 10 mejores puntajes
-app.get('tetris-by-marto-dev-v3.vercel.app/leaderboard', (req, res) => {
+app.get('/leaderboard', (req, res) => {
     const query = `SELECT name, score FROM scores ORDER BY score DESC LIMIT 10`;
     db.all(query, [], (err, rows) => {
       if (err) {
@@ -24,7 +27,7 @@ app.get('tetris-by-marto-dev-v3.vercel.app/leaderboard', (req, res) => {
 });
 
 // Ruta para guardar un nuevo puntaje
-app.post('tetris-by-marto-dev-v3.vercel.app/submit-score', (req, res) => {
+app.post('/submit-score', (req, res) => {
     const { name, score } = req.body;
   
     // Verifica si el jugador ya existe en la base de datos

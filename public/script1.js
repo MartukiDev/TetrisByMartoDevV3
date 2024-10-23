@@ -190,6 +190,7 @@ submitScoreBtn.addEventListener('click', promptForScore);
 function promptForScore() {
   const name = playerNameInput.value.trim();
   const finalScore = parseInt(scoreElement.textContent, 10);
+  console.log(name,finalScore);
   if (name && !isNaN(finalScore)) {
     saveScore(name, finalScore);
   } else {
